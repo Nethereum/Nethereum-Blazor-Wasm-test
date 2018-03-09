@@ -1,0 +1,36 @@
+﻿@using Newtonsoft.Json;
+<h1>Json</h1>
+
+<pre>Current count: @helloJson</pre>
+
+<button @onclick(Serialise)>Click me</button>
+
+@functions {
+    int currentCount = 0;
+    string helloJson = "";
+
+    public class Account
+    {
+        public string Email { get; set; }
+        public bool Active { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public IList<string> Roles { get; set; }
+    }
+
+    void Serialise()
+    {
+        Account account = new Account
+        {
+            Email = "james@example.com",
+            Active = true,
+            CreatedDate = new DateTime(2013, 1, 20, 0, 0, 0, DateTimeKind.Utc),
+            Roles = new List<string>
+    {
+        "User",
+        "Admin"
+    }
+        };
+
+        helloJson = JsonConvert.SerializeObject(account, Formatting.Indented);
+    }
+}

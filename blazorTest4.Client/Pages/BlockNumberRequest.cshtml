@@ -1,0 +1,20 @@
+﻿@using Newtonsoft.Json;
+@using Nethereum.RPC.Eth.Blocks;
+@using Nethereum.JsonRpc.Client.RpcMessages;
+<h1>Json Request</h1>
+
+<pre>@helloJson</pre>
+
+<button @onclick(Serialise)>Click me</button>
+
+@functions {
+string helloJson = "";
+
+void Serialise()
+{
+    var blockNumber = new EthBlockNumber(null);
+    var request = blockNumber.BuildRequest();
+    var requestMessage = new RpcRequestMessage(request.Id, request.Method, request.RawParameters);
+    helloJson = JsonConvert.SerializeObject(requestMessage, Formatting.Indented);
+}
+}

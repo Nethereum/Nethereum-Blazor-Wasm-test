@@ -1,0 +1,40 @@
+﻿<div class='main-nav'>
+    <div class='navbar navbar-inverse'>
+        <div class='navbar-header'>
+            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+                <span class='sr-only'>Toggle navigation</span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+            </button>
+            <a class='navbar-brand' href='/'>blazorTest4</a>
+        </div>
+        <div class='clearfix'></div>
+        <div class='navbar-collapse collapse'>
+            <ul class='nav navbar-nav'>
+                <li>
+                    <!-- The 'c:' prefix and parens are workarounds for a Razor compilation issue and will be removed soon. -->
+                    <c:NavLink href=@("/")>
+                        <span class='glyphicon glyphicon-home'></span> Home
+                    </c:NavLink>
+                </li>
+                <li>
+                    <c:NavLink href=@("/counter")>
+                        <span class='glyphicon glyphicon-education'></span> Counter
+                    </c:NavLink>
+                </li>
+                <li>
+                    <c:NavLink href=@("/fetchdata")>
+                        <span class='glyphicon glyphicon-th-list'></span> Fetch data
+                    </c:NavLink>
+                </li>
+
+                <li>
+                    <c:NavLink href=@("/blocknumberrequest")>
+                        <span class='glyphicon glyphicon-th-list'></span> Block Number Request
+                    </c:NavLink>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,16 +1,22 @@
 # Nethereum-Blazor-Wasm
 
-Testing wasm / blazor compatibility
+This repo is for testing the Experimental .Net WAM (Web Assembly) / blazor compatibility with Nethereum.
 
-Spike / PoC of integrating the Experimental .Net Wasm / Blazor with Nethereum and Metamask. 
+So far has succesfully integrated to Ethereum using Nethereum and Metamask. There has been some issues loading Accounts from private keys, but this won't be necessary if using Metamask to manage your accounts and sign transactions on the web.
 
-Blazor with Web Assembly allows you to run .Net applications in the browser. 
+# So what is blazor?
 
-Mono has been compiled to web assembly and the run time can load .Net assemblies in the same way as in a server / desktop enviroment. To enable faster loads the dlls could be compiled AOT.
-Blazor based on Razor provides (or will provide) as simple way to create your SPAs.
+Blazor and Web Assembly allows you to run .Net applications in the browser. 
+
+Mono has been compiled to web assembly and the run time can load .Net assemblies in the same way as in a server / desktop enviroment. 
+
+To enable faster loads the Nethereum dlls could be (will be) compiled AOT in the future and distributed as such.
+
+Blazor it is based on Razor (Asp.Net template enging) and has the vision to provide a much better and simpler way to create SPAs.
+
 For more info go to https://github.com/aspnet/Blazor and also check the videos.
 
-## .Net Dapps on the Web!
+## In a simpler way this means, .Net Dapps on the Web!
 
 ![Nethereum / Wasm](screenshots/screenshot.PNG)
 

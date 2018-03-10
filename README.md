@@ -1,6 +1,6 @@
 # Nethereum-Blazor-Wasm
 
-This repo is for testing the Experimental .Net WAM (Web Assembly) / blazor compatibility with Nethereum.
+This repo is for testing the Experimental .Net WASM (Web Assembly) / blazor compatibility with Nethereum (and Metamask integration)
 
 So far has succesfully integrated to Ethereum using Nethereum and Metamask. There has been some issues loading Accounts from private keys, but this won't be necessary if using Metamask to manage your accounts and sign transactions on the web.
 

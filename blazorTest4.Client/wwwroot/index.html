@@ -12,5 +12,49 @@
 
     <script src="css/bootstrap/bootstrap-native.min.js"></script>
     <script type="blazor-boot"></script>
+    <script>
+        window.addEventListener('load', function() {
+        // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+        if (typeof web3 !== 'undefined') {
+                window.web3 = new Web3(web3.currentProvider);
+                if (typeof (window.web3.eth.accounts[0]) == 'undefined') {
+                        alert('Please unlock Metamask to submit transactions');
+                } else {
+                    Blazor.registerFunction('sendTransaction', sendTransaction);
+                    Blazor.registerFunction('getAccount', getAccount);
+                 }
+        } else {
+            alert('Please install Metamask to submit transactions');
+        }
+        });
+
+        function getAccount() {
+            return web3.eth.accounts[0];
+        }
+
+        function sendTransaction(to, data) {
+            
+            var from = web3.eth.accounts[0];
+            if ((typeof (to) !== 'undefined') && (to !== null)) {
+                web3.eth.sendTransaction({ from: from, to: to, data: data }, function (error, hash) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    else {
+                        console.log(hash);
+                    }
+                });
+            } else {
+                web3.eth.sendTransaction({ from: from, data: data }, function (error, hash) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    else {
+                        console.log(hash);
+                    }
+                });
+            }
+         }
+    </script>
 </body>
 </html>

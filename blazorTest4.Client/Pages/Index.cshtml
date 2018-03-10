@@ -1,73 +1,86 @@
 ﻿@using Nethereum.Web3;
 @using Nethereum.JsonRpc.Client;
 @using Nethereum.Web3.Accounts;
+@using Microsoft.AspNetCore.Blazor.Browser.Interop;
+@using Nethereum.Contracts;
 
 @inject HttpClient Http
 
+<p>Rpc client url</p>
+<input @bind(rpcUrl) type="text" placeholder="Enter rpc url" />
+
 <p>Current block: @currentBlock</p>
+<button @onclick(GetCurrentBlock)>Get current block</button>
 
-<button @onclick(GetCurrentBlock)>Click me</button>
+<p>Get balance standard token contract</p>
+<input @bind(smartContractAddress) type="text" placeholder="Enter smart contract adddress..." />
+<p>Account:</p>
+<input @bind(userAddress) type="text" placeholder="Enter address..." />
+<button @onclick(GetAccountFromMetamask)>Get account from Metamask</button>
+<button @onclick(GetBalance)>Get contract balance</button>
+<p>Balance: @balance</p>
 
-<p>Load Account (Does not work I guess bouncy castle): @deployContractTransaction</p>
-<button @onclick(LoadAccount)>Click me</button>
-
-<p>Deploy contract transaction (Does not work I guess bouncy castle): @deployContractTransaction</p>
-
-<button @onclick(DeployContract)>Click me</button>
-
-
-<p>Query contract: @balance</p>
-
-<button @onclick(GetBalance)>Click me</button>
-
+<button @onclick(DeployContract)>Deploy contract with Metamask</button>
+<p>Deploy contract transaction: @deployContractTransaction</p>
 
 @functions {
+
+
+    string rpcUrl;
+    string userAddress;
+    string smartContractAddress;
     int currentBlock = 0;
     string deployContractTransaction = "";
     string accountAddress = "";
     decimal balance;
+    string abiStandardToken = @"[{""constant"":false,""inputs"":[{""name"":""_spender"",""type"":""address""},{""name"":""_value"",""type"":""uint256""}],""name"":""approve"",""outputs"":[{""name"":""success"",""type"":""bool""}],""type"":""function""},{""constant"":true,""inputs"":[],""name"":""totalSupply"",""outputs"":[{""name"":""supply"",""type"":""uint256""}],""type"":""function""},{""constant"":false,""inputs"":[{""name"":""_from"",""type"":""address""},{""name"":""_to"",""type"":""address""},{""name"":""_value"",""type"":""uint256""}],""name"":""transferFrom"",""outputs"":[{""name"":""success"",""type"":""bool""}],""type"":""function""},{""constant"":true,""inputs"":[{""name"":""_owner"",""type"":""address""}],""name"":""balanceOf"",""outputs"":[{""name"":""balance"",""type"":""uint256""}],""type"":""function""},{""constant"":false,""inputs"":[{""name"":""_to"",""type"":""address""},{""name"":""_value"",""type"":""uint256""}],""name"":""transfer"",""outputs"":[{""name"":""success"",""type"":""bool""}],""type"":""function""},{""constant"":true,""inputs"":[{""name"":""_owner"",""type"":""address""},{""name"":""_spender"",""type"":""address""}],""name"":""allowance"",""outputs"":[{""name"":""remaining"",""type"":""uint256""}],""type"":""function""},{""inputs"":[{""name"":""_initialAmount"",""type"":""uint256""}],""type"":""constructor""},{""anonymous"":false,""inputs"":[{""indexed"":true,""name"":""_from"",""type"":""address""},{""indexed"":true,""name"":""_to"",""type"":""address""},{""indexed"":false,""name"":""_value"",""type"":""uint256""}],""name"":""Transfer"",""type"":""event""},{""anonymous"":false,""inputs"":[{""indexed"":true,""name"":""_owner"",""type"":""address""},{""indexed"":true,""name"":""_spender"",""type"":""address""},{""indexed"":false,""name"":""_value"",""type"":""uint256""}],""name"":""Approval"",""type"":""event""}]";
 
-    void LoadAccount()
+
+    protected override void OnInit()
     {
-        var privateKey = "0xb5b1870957d373ef0eeffecc6e4812c0fd08f554b37b233526acc331bf1544f7";
-        var account = new Account(privateKey, 444444444500);
-        accountAddress = account.Address;
-
+        rpcUrl = "http://localhost:8545";
+        userAddress = "0x12890d2cce102216644c59daE5baed380d84830c";
     }
 
     async void GetBalance()
     {
-        var contractAddress = "0x744c2fae11f98ab3ae963f569526ae8f230f9fd5";
-        var abi = @"[{""constant"":false,""inputs"":[{""name"":""_spender"",""type"":""address""},{""name"":""_value"",""type"":""uint256""}],""name"":""approve"",""outputs"":[{""name"":""success"",""type"":""bool""}],""type"":""function""},{""constant"":true,""inputs"":[],""name"":""totalSupply"",""outputs"":[{""name"":""supply"",""type"":""uint256""}],""type"":""function""},{""constant"":false,""inputs"":[{""name"":""_from"",""type"":""address""},{""name"":""_to"",""type"":""address""},{""name"":""_value"",""type"":""uint256""}],""name"":""transferFrom"",""outputs"":[{""name"":""success"",""type"":""bool""}],""type"":""function""},{""constant"":true,""inputs"":[{""name"":""_owner"",""type"":""address""}],""name"":""balanceOf"",""outputs"":[{""name"":""balance"",""type"":""uint256""}],""type"":""function""},{""constant"":false,""inputs"":[{""name"":""_to"",""type"":""address""},{""name"":""_value"",""type"":""uint256""}],""name"":""transfer"",""outputs"":[{""name"":""success"",""type"":""bool""}],""type"":""function""},{""constant"":true,""inputs"":[{""name"":""_owner"",""type"":""address""},{""name"":""_spender"",""type"":""address""}],""name"":""allowance"",""outputs"":[{""name"":""remaining"",""type"":""uint256""}],""type"":""function""},{""inputs"":[{""name"":""_initialAmount"",""type"":""uint256""}],""type"":""constructor""},{""anonymous"":false,""inputs"":[{""indexed"":true,""name"":""_from"",""type"":""address""},{""indexed"":true,""name"":""_to"",""type"":""address""},{""indexed"":false,""name"":""_value"",""type"":""uint256""}],""name"":""Transfer"",""type"":""event""},{""anonymous"":false,""inputs"":[{""indexed"":true,""name"":""_owner"",""type"":""address""},{""indexed"":true,""name"":""_spender"",""type"":""address""},{""indexed"":false,""name"":""_value"",""type"":""uint256""}],""name"":""Approval"",""type"":""event""}]";
-        var senderAddress = "0x12890d2cce102216644c59daE5baed380d84830c";
         var web3 = new Web3(new SimpleRpcClient(new Uri("http://localhost:8545"), Http, null));
-        var contract = web3.Eth.GetContract(abi, contractAddress);
+        var contract = web3.Eth.GetContract(abiStandardToken, smartContractAddress);
         var balanceFunction = contract.GetFunction("balanceOf");
-        var balanceWei = await balanceFunction.CallAsync<System.Numerics.BigInteger>(senderAddress);
+        var balanceWei = await balanceFunction.CallAsync<System.Numerics.BigInteger>(userAddress);
         balance = Web3.Convert.FromWei(balanceWei);
+        StateHasChanged();
     }
 
     async void GetCurrentBlock()
     {
-        //
-        //var privateKey = "0xb5b1870957d373ef0eeffecc6e4812c0fd08f554b37b233526acc331bf1544f7";
-        //var account = new Account(privateKey, 444444444500);
-        var web3 = new Web3(new SimpleRpcClient(new Uri("http://localhost:8545"), Http, null));
+        var web3 = new Web3(new SimpleRpcClient(new Uri(rpcUrl), Http, null));
         var block = await web3.Eth.Blocks.GetBlockNumber.SendRequestAsync();
         currentBlock = (int)block.Value;
+        StateHasChanged();
     }
 
     async void DeployContract()
     {
         var contractByteCode = "0x60606040526040516020806106f5833981016040528080519060200190919050505b80600160005060003373ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060005081905550806000600050819055505b506106868061006f6000396000f360606040523615610074576000357c010000000000000000000000000000000000000000000000000000000090048063095ea7b31461008157806318160ddd146100b657806323b872dd146100d957806370a0823114610117578063a9059cbb14610143578063dd62ed3e1461017857610074565b61007f5b610002565b565b005b6100a060048080359060200190919080359060200190919050506101ad565b6040518082815260200191505060405180910390f35b6100c36004805050610674565b6040518082815260200191505060405180910390f35b6101016004808035906020019091908035906020019091908035906020019091905050610281565b6040518082815260200191505060405180910390f35b61012d600480803590602001909190505061048d565b6040518082815260200191505060405180910390f35b61016260048080359060200190919080359060200190919050506104cb565b6040518082815260200191505060405180910390f35b610197600480803590602001909190803590602001909190505061060b565b6040518082815260200191505060405180910390f35b600081600260005060003373ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060005060008573ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600050819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925846040518082815260200191505060405180910390a36001905061027b565b92915050565b600081600160005060008673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600050541015801561031b575081600260005060008673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060005060003373ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000505410155b80156103275750600082115b1561047c5781600160005060008573ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828282505401925050819055508273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef846040518082815260200191505060405180910390a381600160005060008673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282825054039250508190555081600260005060008673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060005060003373ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828282505403925050819055506001905061048656610485565b60009050610486565b5b9392505050565b6000600160005060008373ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000505490506104c6565b919050565b600081600160005060003373ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600050541015801561050c5750600082115b156105fb5781600160005060003373ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282825054039250508190555081600160005060008573ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000206000828282505401925050819055508273ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef846040518082815260200191505060405180910390a36001905061060556610604565b60009050610605565b5b92915050565b6000600260005060008473ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060005060008373ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060005054905061066e565b92915050565b60006000600050549050610683565b9056";
         var abi = @"[{""constant"":false,""inputs"":[{""name"":""_spender"",""type"":""address""},{""name"":""_value"",""type"":""uint256""}],""name"":""approve"",""outputs"":[{""name"":""success"",""type"":""bool""}],""type"":""function""},{""constant"":true,""inputs"":[],""name"":""totalSupply"",""outputs"":[{""name"":""supply"",""type"":""uint256""}],""type"":""function""},{""constant"":false,""inputs"":[{""name"":""_from"",""type"":""address""},{""name"":""_to"",""type"":""address""},{""name"":""_value"",""type"":""uint256""}],""name"":""transferFrom"",""outputs"":[{""name"":""success"",""type"":""bool""}],""type"":""function""},{""constant"":true,""inputs"":[{""name"":""_owner"",""type"":""address""}],""name"":""balanceOf"",""outputs"":[{""name"":""balance"",""type"":""uint256""}],""type"":""function""},{""constant"":false,""inputs"":[{""name"":""_to"",""type"":""address""},{""name"":""_value"",""type"":""uint256""}],""name"":""transfer"",""outputs"":[{""name"":""success"",""type"":""bool""}],""type"":""function""},{""constant"":true,""inputs"":[{""name"":""_owner"",""type"":""address""},{""name"":""_spender"",""type"":""address""}],""name"":""allowance"",""outputs"":[{""name"":""remaining"",""type"":""uint256""}],""type"":""function""},{""inputs"":[{""name"":""_initialAmount"",""type"":""uint256""}],""type"":""constructor""},{""anonymous"":false,""inputs"":[{""indexed"":true,""name"":""_from"",""type"":""address""},{""indexed"":true,""name"":""_to"",""type"":""address""},{""indexed"":false,""name"":""_value"",""type"":""uint256""}],""name"":""Transfer"",""type"":""event""},{""anonymous"":false,""inputs"":[{""indexed"":true,""name"":""_owner"",""type"":""address""},{""indexed"":true,""name"":""_spender"",""type"":""address""},{""indexed"":false,""name"":""_value"",""type"":""uint256""}],""name"":""Approval"",""type"":""event""}]";
+        System.Numerics.BigInteger totalSupply = System.Numerics.BigInteger.Parse("1000000000000000000");
+        var builder = new DeployContractTransactionBuilder();
+        var data = builder.GetData(contractByteCode, abi, totalSupply);
+        RegisteredFunction.Invoke<object>("sendTransaction", null, data);
+    }
 
+    void GetAccountFromMetamask()
+    {
+        userAddress = RegisteredFunction.Invoke<string>("getAccount");
+    }
+
+    void LoadAccount()
+    {
+        //Not working I assume is an issue with Bouncy Castle and Elliptic Curve ?
         var privateKey = "0xb5b1870957d373ef0eeffecc6e4812c0fd08f554b37b233526acc331bf1544f7";
-        //var senderAddress = "0x12890d2cce102216644c59daE5baed380d84830c";
         var account = new Account(privateKey, 444444444500);
-        //var web3 = new Web3(account, new SimpleRpcClient(new Uri("http://localhost:8545"), Http, null));
-        //System.Numerics.BigInteger totalSupply = System.Numerics.BigInteger.Parse("1000000000000000000");
-        ///deployContractTransaction = await web3.Eth.DeployContract.SendRequestAsync(abi, contractByteCode, senderAddress, new Nethereum.Hex.HexTypes.HexBigInteger(900000), null, totalSupply);
+        accountAddress = account.Address;
 
     }
 

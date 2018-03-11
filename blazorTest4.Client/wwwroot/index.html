@@ -32,8 +32,8 @@
             return web3.eth.accounts[0];
         }
 
+        //we should pass the gas price, gas cost, value etc.. here too.
         function sendTransaction(to, data) {
-            
             var from = web3.eth.accounts[0];
             if ((typeof (to) !== 'undefined') && (to !== null)) {
                 web3.eth.sendTransaction({ from: from, to: to, data: data }, function (error, hash) {

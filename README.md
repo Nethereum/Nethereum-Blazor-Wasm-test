@@ -14,7 +14,15 @@ To enable faster loads the Nethereum dlls could be (will be) compiled AOT in the
 
 Blazor it is based on Razor (Asp.Net template engine) and has the vision to provide a much better and simpler way to create SPAs. Any Asp.net developer should be able to create an SPA easily.
 
-For more info go to https://github.com/aspnet/Blazor, check this new website to get started https://learn-blazor.com/, and Steve Sanderson's blog http://blog.stevensanderson.com/2018/02/06/blazor-intro/
+# Get started with Blazor
+
+To get started, please check out these resources in order. (Don't just jump like me straight to the github repo :))
+
+**For the best and greatest introduction on Blazor first read** Steve Sanderson's blog  http://blog.stevensanderson.com/2018/02/06/blazor-intro/
+
+To learn about specific topics a new website has just been created: https://learn-blazor.com/
+
+And of course the Blazor github repository: https://github.com/aspnet/Blazor.
 
 ## In a simpler way this means, .Net Dapps on the Web!
 

@@ -52,14 +52,14 @@ Blazor provides already the capability to bind our controls, (including 2 way bi
 
 This simple example, demonstrates the 2 way binding of the url we will use to connect to Ethereum.
 
-```
+```html
 <p>Rpc client url</p>
 <input @bind(rpcUrl) type="text" placeholder="Enter rpc url" />
 ```
 
 This is the rest of the blazor / razor view:
 
-```
+```html
 <p>Current block: @currentBlock</p>
 <button @onclick(GetCurrentBlock)>Get current block</button>
 

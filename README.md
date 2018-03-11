@@ -4,7 +4,7 @@ This repo is for testing the Experimental .Net WASM (Web Assembly) / blazor comp
 
 So far has succesfully integrated to Ethereum using Nethereum and Metamask. There has been some issues loading Accounts from private keys, but this won't be necessary if using Metamask to manage your accounts and sign transactions on the web.
 
-# So what is blazor?
+## So what is blazor?
 
 Blazor and Web Assembly allows you to run .Net applications in the browser. 
 
@@ -14,7 +14,7 @@ To enable faster loads the Nethereum dlls could be (will be) compiled AOT in the
 
 Blazor it is based on Razor (Asp.Net template engine) and has the vision to provide a much better and simpler way to create SPAs. Any Asp.net developer should be able to create an SPA easily.
 
-# Get started with Blazor
+## Get started with Blazor
 
 To get started, please check out these resources in order. (Don't just jump like me straight to the github repo :))
 

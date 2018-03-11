@@ -34,7 +34,7 @@ dotnet new -i  Microsoft.AspNetCore.Blazor.Templates::0.1.* --nuget-source https
 
 ### The code:
 
-In a similar way to any other Razor page, we need to declare first the using statements, these include the Nethereum, Blazor and also the custom Blazor HttpClient which is injected and we will use for our Rpc calls to a client
+In a similar way to any other Razor page, we need to declare first the using statements, these include the Nethereum, Blazor and also the custom Blazor HttpClient which will be used for our Rpc calls to an Ethereum public node.
 
 ```csharp
 @using Nethereum.Web3;
@@ -48,16 +48,16 @@ In a similar way to any other Razor page, we need to declare first the using sta
 
 #### The Razor part (View template)
 
-Here we can see a simple data input (The url). 
+Blazor provides already the capability to bind our controls, (including 2 way binding) and event handling like (@onclick) of a button.
 
-Notice the 2 way binding on the input element to the variable "rpcUrl"
+This simple example, demonstrates the 2 way binding of the url we will use to connect to Ethereum.
 
 ```
 <p>Rpc client url</p>
 <input @bind(rpcUrl) type="text" placeholder="Enter rpc url" />
 ```
 
-These are the rest of data input and actions. Notice the @onclick and method calls
+This is the rest of the blazor / razor view:
 
 ```
 <p>Current block: @currentBlock</p>
@@ -65,6 +65,7 @@ These are the rest of data input and actions. Notice the @onclick and method cal
 
 <p>Get balance standard token contract</p>
 <input @bind(smartContractAddress) type="text" placeholder="Enter smart contract adddress..." />
+
 <p>Account:</p>
 <input @bind(userAddress) type="text" placeholder="Enter address..." />
 <button @onclick(GetAccountFromMetamask)>Get account from Metamask</button>
@@ -73,11 +74,12 @@ These are the rest of data input and actions. Notice the @onclick and method cal
 
 <button @onclick(DeployContract)>Deploy contract with Metamask</button>
 <p>Deploy contract transaction: @deployContractTransaction</p>
+
 ```
 
 #### The functional code
 
-All the code it is included on the @functions in this sample (this could be structure better with a ViewModel in the future).
+All the functionality of code it is included on the @functions in this sample (this could be structure better with a ViewModel in the future).
 
 ```csharp
 @functions {
@@ -101,9 +103,9 @@ All the code it is included on the @functions in this sample (this could be stru
 ```
 ##### Interacting with the blockchain and retrieving the state from smart contracts 
 
-To get the balance from the standard token smart contract or to make a simple call like the current block number, first we declare Web3 using the new SimpleRpcClient which accepts the HttpClient injected.
-The rest will be the same Nethereum code, notice the call for StateHasChanged, this is to update the async changes. 
-This won't be required in the future.
+To get the balance from the standard token smart contract or to make a simple call like the current block number, first we declare Web3 using the new SimpleRpcClient which accepts the Blazor HttpClient.
+
+All the other code is the standard Nethereum functionality. One thing to notice the call for StateHasChanged, this is to update the async changes, which won't be required in the future.
 
 ```csharp
     async void GetBalance()
@@ -127,8 +129,20 @@ This won't be required in the future.
 
 ##### Interacting with metamask to sign the transactions
 
-To deploy a contract or get the current account interacting with metamask, we interop with Javascript. This is similar to how we interop with Unity3d when using WebGL.
-Blazor provides already a very simple way to marshalling the data arguments and response from Javascript to .Net and viceversa, for registered functions, it is seemless
+To deploy a contract or get the current account interacting with metamask, we interop with Javascript. This is similar to how we interop with Unity3d when using WebGL. https://medium.com/@juanfranblanco/nethereum-2-0-0-rc5-unity3d-integration-eb7664664813
+
+Blazor improves on the intereoperability that Unity3d provides, as there is no need as a developer convert the data from .Net to Javascript and viceversa.
+
+Calling a Javascript function, like "sendTransaction" or "getAccount" becomes as simple as:
+
+```csharp
+
+RegisteredFunction.Invoke<object>("sendTransaction", null, data);
+
+userAddress = RegisteredFunction.Invoke<string>("getAccount");
+````
+
+Here is the full code to Deploy an Smart contract and to get the current account from Metamask.
 
 ```csharp
     async void DeployContract()
@@ -149,16 +163,14 @@ Blazor provides already a very simple way to marshalling the data arguments and 
 
 ### The Javascript interop side
 
-Metamask integration is the same as any other Dapp. But to interact from our .Net code with Javascript the function calls need to be registered. There is also the possibility to interop from Javascript to .Net too.
-
-Here we are registering the functions to send a transaction and to get the current account.
+Metamask integration is the same as in any other Dapp. Only difference is that to interact from our .Net code with Javascript the function calls need to be registered. Note that there is also the possibility to interop from Javascript to .Net too, not provided in this sample.
 
 ```javascript
   Blazor.registerFunction('sendTransaction', sendTransaction);
   Blazor.registerFunction('getAccount', getAccount);
 ```
 
-The full script on our index file is as follows, first the usual Metamask installation checks, and afterwards the two functions registered to interop, "sendTransaction" and "getAccounts".
+The full script on our index file includes the standard Metamask installation checks, and afterwards the two functions registered to interop, "sendTransaction" and "getAccounts".
 
 ```javascript
 window.addEventListener('load', function() {

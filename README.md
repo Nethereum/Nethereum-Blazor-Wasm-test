@@ -1,24 +1,24 @@
 # Nethereum-Blazor-Wasm
 
-This repo is for testing the Experimental .Net WASM (Web Assembly) / blazor compatibility with Nethereum (and Metamask integration)
+This repo provides a starting point for testing the Experimental .Net WASM (Web Assembly) / blazor compatibility with Nethereum (and Metamask integration)
 
-So far has succesfully integrated to Ethereum using Nethereum and Metamask. There has been some issues loading Accounts from private keys, but this won't be necessary if using Metamask to manage your accounts and sign transactions on the web.
+So far, Blazor has succesfully integrated to Ethereum using Nethereum and Metamask. There have been some issues loading Accounts from private keys, but this won't be necessary if using Metamask to manage your accounts and sign transactions on the web.
 
 ## So what is blazor?
 
-Blazor and Web Assembly allows you to run .Net applications in the browser. 
+Blazor and Web Assembly allow you to run .Net applications in the browser. 
 
-Mono has been compiled to web assembly and the run time can load .Net assemblies in the same way as in a server / desktop enviroment. 
+Mono has been compiled to web assembly and the run time can load .Net assemblies in the same way as in a server / desktop environment. 
 
 To enable faster loads the Nethereum dlls could be (will be) compiled AOT in the future and distributed as such.
 
-Blazor it is based on Razor (Asp.Net template engine) and has the vision to provide a much better and simpler way to create SPAs. Any Asp.net developer should be able to create an SPA easily.
+Blazor is based on Razor (Asp.Net template engine) and has the vision to provide a much better and simpler way to create SPAs. Any Asp.net developer should be able to create an SPA easily.
 
 ## Get started with Blazor
 
 To get started, please check out these resources in order. (Don't just jump like me straight to the github repo :))
 
-**For the best and greatest introduction on Blazor first read** Steve Sanderson's blog  http://blog.stevensanderson.com/2018/02/06/blazor-intro/
+**For the best introduction on Blazor first read** Steve Sanderson's blog  http://blog.stevensanderson.com/2018/02/06/blazor-intro/
 
 To learn about specific topics a new website has just been created: https://learn-blazor.com/
 
@@ -30,7 +30,7 @@ And of course the Blazor github repository: https://github.com/aspnet/Blazor.
 
 ## Simple introduction, and work with Nethereum, Metamask.
 
-### Installation blazor .Net project template
+### Installing blazor .Net project template
 
 You can either download this repo and update the nugets or get the latest template and add Nethereum.Web3 package to the Client Project.
 
@@ -42,7 +42,7 @@ dotnet new -i  Microsoft.AspNetCore.Blazor.Templates::0.1.* --nuget-source https
 
 ### The code:
 
-In a similar way to any other Razor page, we need to declare first the using statements, these include the Nethereum, Blazor and also the custom Blazor HttpClient which will be used for our Rpc calls to an Ethereum public node.
+life for any other Razor page, we need to declare first the using statements, these include the Nethereum, Blazor and also the custom Blazor HttpClient which will be used for our Rpc calls to an Ethereum public node.
 
 ```csharp
 @using Nethereum.Web3;
@@ -56,7 +56,7 @@ In a similar way to any other Razor page, we need to declare first the using sta
 
 #### The Razor part (View template)
 
-Blazor provides already the capability to bind our controls, (including 2 way binding) and event handling like (@onclick) of a button.
+Blazor already provides the capability to bind our controls, (including 2 way binding) and event handling like (@onclick) of a button.
 
 This simple example, demonstrates the 2 way binding of the url we will use to connect to Ethereum.
 
@@ -87,7 +87,7 @@ This is the rest of the blazor / razor view:
 
 #### The functional code
 
-All the functionality of code it is included on the @functions in this sample (this could be structure better with a ViewModel in the future).
+All the code functionality is included in the @functions in this sample (this could be structured better with a ViewModel in the future).
 
 ```csharp
 @functions {
@@ -171,7 +171,7 @@ Here is the full code to Deploy an Smart contract and to get the current account
 
 ### The Javascript interop side
 
-Metamask integration is the same as in any other Dapp. Only difference is that to interact from our .Net code with Javascript the function calls need to be registered. Note that there is also the possibility to interop from Javascript to .Net too, not provided in this sample.
+Metamask integration is the same as in any other Dapp. The only difference is that to interact from our .Net code with Javascript the function calls need to be registered. Note that there is also the possibility to interop from Javascript to .Net too, not provided in this sample.
 
 ```javascript
   Blazor.registerFunction('sendTransaction', sendTransaction);
